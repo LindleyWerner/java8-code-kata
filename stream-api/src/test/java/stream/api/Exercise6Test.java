@@ -20,6 +20,10 @@ public class Exercise6Test {
          */
         Stream<String> abcStream = null;
 
+        //***************Start solution***************
+        abcStream = Stream.of("a", "b", "c");
+        //****************End solution****************
+        
         List<String> abcList = abcStream.collect(Collectors.toList());
         assertThat(abcList, contains("a", "b", "c"));
     }
@@ -31,6 +35,11 @@ public class Exercise6Test {
          */
         Stream<Integer> numbers = null;
 
+        //***************Start solution***************
+        numbers = Stream.iterate(0, n -> n+3)
+        			.limit(10);
+        //****************End solution****************
+        
         List<Integer> numbersList = numbers.collect(Collectors.toList());
         assertThat(numbersList, contains(0, 3, 6, 9, 12, 15, 18, 21, 24, 27));
     }

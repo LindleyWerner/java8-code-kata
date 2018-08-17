@@ -22,13 +22,20 @@ public class Exercise1Test extends ClassicOnlineStore {
     @Easy @Test
     public void findRichCustomers() {
         List<Customer> customerList = this.mall.getCustomerList();
-
+        
         /**
          * Create a {@link Stream} from customerList only including customer who has more budget than 10000.
          * Use lambda expression for Predicate and {@link Stream#filter} for filtering.
          */
         Predicate<Customer> richCustomerCondition = null;
         Stream<Customer> richCustomerStream = null;
+        
+        //***************Start solution***************
+        richCustomerCondition = customer -> customer.getBudget() > 10000;
+        
+        richCustomerStream = customerList.stream()    
+        	.filter(richCustomerCondition);
+        //****************End solution****************
 
         assertTrue("Solution for Predicate should be lambda expression", AssertUtil.isLambda(richCustomerCondition));
         List<Customer> richCustomer = richCustomerStream.collect(Collectors.toList());
@@ -47,7 +54,14 @@ public class Exercise1Test extends ClassicOnlineStore {
          */
         Function<Customer, Integer> getAgeFunction = null;
         Stream<Integer> ageStream = null;
-
+        
+        //***************Start solution***************
+        getAgeFunction = age -> age.getAge().intValue();
+        
+        ageStream = customerList.stream()
+        		.map(getAgeFunction);        
+        //****************End solution****************
+        
         assertTrue(AssertUtil.isLambda(getAgeFunction));
         List<Integer> ages = ageStream.collect(Collectors.toList());
         assertThat(ages, hasSize(10));

@@ -11,14 +11,17 @@ import org.junit.Test;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.StringJoiner;
 import java.util.function.BiConsumer;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.is;
@@ -34,11 +37,11 @@ public class Exercise9Test extends ClassicOnlineStore {
          * Implement a {@link Collector} which can create a String with comma separated names shown in the assertion.
          * The collector will be used by serial stream.
          */
-        Supplier<Object> supplier = null;
-        BiConsumer<Object, String> accumulator = null;
-        BinaryOperator<Object> combiner = null;
-        Function<Object, String> finisher = null;
-
+        Supplier<StringJoiner> supplier = () -> new StringJoiner(",");
+        BiConsumer<StringJoiner, String> accumulator = StringJoiner::add;
+        BinaryOperator<StringJoiner> combiner = null;
+        Function<StringJoiner, String> finisher = StringJoiner::toString;
+       
         Collector<String, ?, String> toCsv =
             new CollectorImpl<>(supplier, accumulator, combiner, finisher, Collections.emptySet());
         String nameAsCsv = customerList.stream().map(Customer::getName).collect(toCsv);
@@ -54,11 +57,15 @@ public class Exercise9Test extends ClassicOnlineStore {
          * values as {@link Set} of customers who are wanting to buy that item.
          * The collector will be used by parallel stream.
          */
-        Supplier<Object> supplier = null;
+        Supplier<Object> supplier = HashMap::new;
         BiConsumer<Object, Customer> accumulator = null;
         BinaryOperator<Object> combiner = null;
         Function<Object, Map<String, Set<String>>> finisher = null;
 
+        //***************Start solution***************
+        
+        //****************End solution****************
+        
         Collector<Customer, ?, Map<String, Set<String>>> toItemAsKey =
             new CollectorImpl<>(supplier, accumulator, combiner, finisher, EnumSet.of(
                 Collector.Characteristics.CONCURRENT,
@@ -88,6 +95,10 @@ public class Exercise9Test extends ClassicOnlineStore {
          */
         Collector<String, ?, String> toBitString = null;
 
+        //***************Start solution***************
+        
+        //****************End solution****************
+        
         String bitString = Arrays.stream(bitList.split(",")).collect(toBitString);
         assertThat(bitString, is("01011000101001111000011100000000100001110111010101")
 

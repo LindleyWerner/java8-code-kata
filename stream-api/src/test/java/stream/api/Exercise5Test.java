@@ -1,23 +1,22 @@
 package stream.api;
 
-import common.test.tool.annotation.Easy;
-import common.test.tool.dataset.ClassicOnlineStore;
-import common.test.tool.entity.Customer;
-
-import org.junit.Test;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.hasItems;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.hasItems;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.*;
+import org.junit.Test;
+
+import common.test.tool.annotation.Easy;
+import common.test.tool.dataset.ClassicOnlineStore;
+import common.test.tool.entity.Customer;
 
 public class Exercise5Test extends ClassicOnlineStore {
 
@@ -29,7 +28,13 @@ public class Exercise5Test extends ClassicOnlineStore {
          * Create a list of customer names by using {@link Stream#collect} and {@link Collectors#toList}
          */
         List<String> nameList = null;
-
+        
+        //***************Start solution***************
+        nameList = customerList.stream()
+        				.map(customer -> customer.getName())
+        				.collect(Collectors.toList());
+        //****************End solution****************
+        
         assertThat(nameList, contains("Joe", "Steven", "Patrick", "Diana", "Chris", "Kathy", "Alice", "Andrew",
                                       "Martin", "Amy"));
     }
@@ -43,6 +48,12 @@ public class Exercise5Test extends ClassicOnlineStore {
          */
         Set<Integer> ageSet = null;
 
+        //***************Start solution***************
+        ageSet = customerList.stream()
+        			.map(customer -> customer.getAge())
+        			.collect(Collectors.toSet());
+        //****************End solution****************
+        
         assertThat(ageSet, hasSize(9));
         assertThat(ageSet, hasItems(21, 22, 26, 27, 28, 32, 35, 36, 38));
     }
@@ -56,6 +67,12 @@ public class Exercise5Test extends ClassicOnlineStore {
          */
         String string = null;
 
+        //***************Start solution***************
+        string = customerList.stream()
+        			.map(customer -> customer.getName())
+        			.collect(Collectors.joining(",", "[", "]"));
+        //****************End solution****************
+        
         assertThat(string, is("[Joe,Steven,Patrick,Diana,Chris,Kathy,Alice,Andrew,Martin,Amy]"));
     }
 
@@ -69,6 +86,11 @@ public class Exercise5Test extends ClassicOnlineStore {
          */
         Optional<Customer> oldestCustomer = null;
 
+        //***************Start solution***************
+        oldestCustomer = customerList.stream()
+        					.collect(Collectors.maxBy((c1, c2) -> Integer.compare(c1.getAge(), c2.getAge())));
+        //****************End solution****************
+        
         assertThat(oldestCustomer.get(), is(customerList.get(3)));
     }
 
@@ -82,6 +104,11 @@ public class Exercise5Test extends ClassicOnlineStore {
          */
         Map<Integer, Long> ageDistribution = null;
 
+        //***************Start solution***************
+        ageDistribution = customerList.stream()
+        						.collect(Collectors.groupingBy(Customer::getAge, Collectors.counting()));
+        //****************End solution****************
+        
         assertThat(ageDistribution.size(), is(9));
         ageDistribution.forEach((k, v) -> {
             if (k.equals(22)) {

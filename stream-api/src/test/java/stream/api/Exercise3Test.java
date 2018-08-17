@@ -1,18 +1,17 @@
 package stream.api;
 
-import common.test.tool.annotation.Easy;
-import common.test.tool.dataset.ClassicOnlineStore;
-import common.test.tool.entity.Customer;
-
-import org.junit.Test;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.*;
+import org.junit.Test;
+
+import common.test.tool.annotation.Easy;
+import common.test.tool.dataset.ClassicOnlineStore;
+import common.test.tool.entity.Customer;
 
 public class Exercise3Test extends ClassicOnlineStore {
 
@@ -24,7 +23,13 @@ public class Exercise3Test extends ClassicOnlineStore {
          * Count how many items there are in {@link Customer.wantToBuy} using {@link Stream#count}
          */
         long sum = 0L;
-
+        
+        //***************Start solution***************
+        sum = customerList.stream()
+        			.flatMap(customer -> customer.getWantToBuy().stream())
+        			.count();
+        //****************End solution****************
+        
         assertThat(sum, is(32L));
     }
 
@@ -39,6 +44,14 @@ public class Exercise3Test extends ClassicOnlineStore {
         Comparator<Integer> comparator = null;
         Optional<Integer> richestCustomer = null;
 
+        //***************Start solution***************
+        comparator = Comparator.naturalOrder();
+        
+        richestCustomer = customerList.stream()
+        						.map(customer -> customer.getBudget())
+        						.max(comparator);
+        //****************End solution****************
+        
         assertThat(comparator.getClass().getSimpleName(), is("NaturalOrderComparator"));
         assertThat(richestCustomer.get(), is(12000));
     }
@@ -54,6 +67,13 @@ public class Exercise3Test extends ClassicOnlineStore {
         Comparator<Customer> comparator = null;
         Optional<Customer> youngestCustomer = null;
 
+        //***************Start solution***************
+        comparator = (c1, c2) -> Integer.compare(c1.getAge(), c2.getAge());
+        
+        youngestCustomer = customerList.stream()
+        						.min(comparator);
+        //****************End solution****************
+        
         assertThat(youngestCustomer.get(), is(customerList.get(8)));
     }
 }
